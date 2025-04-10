@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "77"
             endingLineNumber = "77"
-            landmarkName = "textFieldShouldReturn(_:)"
+            landmarkName = "createCancelButton()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -32,7 +32,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "14"
             endingLineNumber = "14"
-            landmarkName = "fetchWeatherData(for:stringUrl:completion:)"
+            landmarkName = "fetchWeatherData(stringUrl:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -48,7 +48,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "25"
             endingLineNumber = "25"
-            landmarkName = "fetchImage(stringUrl:complition:)"
+            landmarkName = "fetchWeatherData(stringUrl:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -2,30 +2,34 @@ import UIKit
 
 private struct Constants {
     static let inset: CGFloat = 20
+    static let cityFontSize: CGFloat = 26
+    static let conditionFontSize: CGFloat = 16
+    static let timeFontSize: CGFloat = 20
+    static let tempFontSize: CGFloat = 40
 }
 
 final class WeatherCell: UITableViewCell {
     private var cityLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 26)
+        label.font = .boldSystemFont(ofSize: Constants.cityFontSize)
         return label
     }()
     
     private var conditionLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.font = .systemFont(ofSize: Constants.conditionFontSize, weight: .regular)
         return label
     }()
     
     private var timeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = .systemFont(ofSize: Constants.timeFontSize, weight: .medium)
         return label
     }()
     
     private var tempLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 40)
+        label.font = .systemFont(ofSize: Constants.tempFontSize)
         return label
     }()
     
@@ -50,7 +54,6 @@ final class WeatherCell: UITableViewCell {
         
         let rightStack = UIStackView(arrangedSubviews: [iconView, tempLabel])
         rightStack.axis = .horizontal
-        rightStack.spacing = 0
         
         let stackView = UIStackView(arrangedSubviews: [leftStack, rightStack])
         stackView.axis = .horizontal
