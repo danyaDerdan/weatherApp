@@ -6,7 +6,7 @@ private struct Constants {
 protocol MainViewModelProtocol {
     var updateViewData: ((ViewData) -> Void)? { get set }
     func viewDidLoad()
-    func findButtonTapped(with string: String)
+    func findButtonTapped(with city: String)
 }
 
 final class MainViewModel: MainViewModelProtocol {
@@ -18,8 +18,9 @@ final class MainViewModel: MainViewModelProtocol {
         updateViewData?(.success(coreDataManager?.getWeather().reversed() ?? []))
     }
     
-    func findButtonTapped(with string: String) {
-        networkService?.fetchWeatherData(for: string, stringUrl: Constants.stringUrl + string) { result in
+    func findButtonTapped(with city: String) {
+        guard checkUniq(city: city) else { return }
+        networkService?.fetchWeatherData(stringUrl: Constants.stringUrl + city) { result in
             switch result {
             case .failure(let error): print(error.localizedDescription) //обработать алертом updateViewData(.failure)
             case .success(let weather): self.saveWeatherToCoreData(weather)
@@ -41,6 +42,10 @@ final class MainViewModel: MainViewModelProtocol {
                 self.updateViewData?(.success(self.coreDataManager?.getWeather().reversed() ?? []))
             }
         }
+    }
+    
+    private func checkUniq(city: String) -> Bool {
+        return !(coreDataManager?.getWeather().contains { $0.city == city } ?? false)
     }
     
     

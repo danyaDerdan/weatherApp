@@ -1,13 +1,13 @@
 import Foundation
 
 protocol NetworkServiceProtocol {
-    func fetchWeatherData(for city: String,  stringUrl: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void)
+    func fetchWeatherData(stringUrl: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void)
     func fetchImage(stringUrl: String, complition: @escaping ((Result<Data, Error>) -> Void))
 }
 
 
 final class NetworkService: NetworkServiceProtocol {
-    func fetchWeatherData(for city: String,  stringUrl: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
+    func fetchWeatherData(stringUrl: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
         guard let url = URL(string: stringUrl) else { completion(.failure(NetworkError.urlError)); return }
         URLSession.shared.dataTask(with: url) { data, _, error in
             if let error { completion(.failure(error)); return }
