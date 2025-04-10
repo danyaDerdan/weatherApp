@@ -21,11 +21,12 @@ final class MainViewModel: MainViewModelProtocol {
     }
     
     func findButtonTapped(with city: String) {
-        guard checkUniq(city: city) else { return }
+        guard checkUniq(city: city), !city.isEmpty else { return }
         networkService?.fetchWeatherData(stringUrl: Constants.stringUrl + city) { result in
             switch result {
             case .failure(_): DispatchQueue.main.async { self.updateViewData?(.failure) }
-            case .success(_):
+            case .success(let data):
+                guard self.checkUniq(city: data.city) else { return }
                 self.saveCity(city)
                 self.loadCities()
             }
