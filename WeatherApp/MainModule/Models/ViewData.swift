@@ -1,7 +1,7 @@
 import Foundation
 
 enum ViewData {
-    case success(Weather)
+    case success([Weather])
     
     struct Weather {
         var time: String
