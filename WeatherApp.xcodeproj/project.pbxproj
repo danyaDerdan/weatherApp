@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E1DB68372DA7A3FB00B46BA1 /* Exceptions for "WeatherApp" folder in "WeatherApp" target */ = {
+		E1DB684A2DA7A8C800B46BA1 /* Exceptions for "WeatherApp" folder in "WeatherApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +24,7 @@
 		E1DB68242DA7A3F900B46BA1 /* WeatherApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				E1DB68372DA7A3FB00B46BA1 /* Exceptions for "WeatherApp" folder in "WeatherApp" target */,
+				E1DB684A2DA7A8C800B46BA1 /* Exceptions for "WeatherApp" folder in "WeatherApp" target */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
