@@ -1,5 +1,8 @@
+import Foundation
+
 private struct Constants {
     static let stringUrl = "https://api.weatherapi.com/v1/current.json?key=5776ff030b0448ab8eb53432251004&q="
+    static let key = "cities"
     
 }
 
@@ -12,41 +15,63 @@ protocol MainViewModelProtocol {
 final class MainViewModel: MainViewModelProtocol {
     var updateViewData: ((ViewData) -> Void)?
     var networkService: NetworkServiceProtocol?
-    var coreDataManager: CoreDataManagerProtocol?
     
     func viewDidLoad() {
-        updateViewData?(.success(coreDataManager?.getWeather().reversed() ?? []))
+        loadCities()
     }
     
     func findButtonTapped(with city: String) {
         guard checkUniq(city: city) else { return }
         networkService?.fetchWeatherData(stringUrl: Constants.stringUrl + city) { result in
             switch result {
-            case .failure(let error): print(error.localizedDescription) //обработать алертом updateViewData(.failure)
-            case .success(let weather): self.saveWeatherToCoreData(weather)
-                
+            case .failure(_): DispatchQueue.main.async { self.updateViewData?(.failure) }
+            case .success(_):
+                self.saveCity(city)
+                self.loadCities()
             }
         }
     }
     
-    private func saveWeatherToCoreData(_ weather: WeatherResponse) {
-        networkService?.fetchImage(stringUrl: "https:" + weather.current.condition.icon) { result in
-            switch result {
-            case .failure(let error): print(error.localizedDescription)
-            case .success(let data):
-                self.coreDataManager?.saveWeather(ViewData.Weather(time: weather.location.localtime, //обработать
-                                                              city: weather.location.name,
-                                                              temp: weather.current.temp_c,
-                                                              condition: weather.current.condition.text,
-                                                              icon: data))
-                self.updateViewData?(.success(self.coreDataManager?.getWeather().reversed() ?? []))
-            }
-        }
+    private func saveCity(_ city: String) {
+        let lastCities = UserDefaults.standard.object(forKey: Constants.key) as? [String] ?? []
+        UserDefaults.standard.set([city] + lastCities, forKey: Constants.key)
     }
     
     private func checkUniq(city: String) -> Bool {
-        return !(coreDataManager?.getWeather().contains { $0.city == city } ?? false)
+        guard let cities = UserDefaults.standard.object(forKey: Constants.key) as? [String] else { return true }
+        return !cities.contains(city)
     }
     
+    private func loadCities() {
+        let cities = UserDefaults.standard.object(forKey: Constants.key) as? [String] ?? []
+
+        var results = [ViewData.Weather]()
+        let dispatchGroup = DispatchGroup()
+
+        for city in cities {
+            dispatchGroup.enter()
+            networkService?.fetchWeatherData(stringUrl: Constants.stringUrl + city) { result in
+                switch result {
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    dispatchGroup.leave()
+                case .success(var data):
+                    DispatchQueue.main.async {
+                        data.time = self.correctDate(data.time)
+                        results.append(data)
+                        dispatchGroup.leave()
+                    }
+                }
+            }
+            
+        }
+        dispatchGroup.notify(queue: .main) {
+            self.updateViewData?(.success(results))
+        }
+    }
+    
+    private func correctDate(_ date: String) -> String {
+        return String(date.split(separator: " ")[1])
+    }
     
 }

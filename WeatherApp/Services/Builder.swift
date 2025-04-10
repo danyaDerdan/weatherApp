@@ -9,9 +9,7 @@ final class Builder: BuilderProtocol {
         let viewModel = MainViewModel()
         let viewController = MainViewController()
         let networkService = NetworkService()
-        let coreDataManager = CoreDataManager()
         viewModel.networkService = networkService
-        viewModel.coreDataManager = coreDataManager
         viewController.viewModel = viewModel
         return viewController
     }
