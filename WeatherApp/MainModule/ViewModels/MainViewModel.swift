@@ -15,7 +15,7 @@ final class MainViewModel: MainViewModelProtocol {
     var coreDataManager: CoreDataManagerProtocol?
     
     func viewDidLoad() {
-        updateViewData?(.success(coreDataManager?.getWeather() ?? []))
+        updateViewData?(.success(coreDataManager?.getWeather().reversed() ?? []))
     }
     
     func findButtonTapped(with string: String) {
@@ -29,7 +29,7 @@ final class MainViewModel: MainViewModelProtocol {
     }
     
     private func saveWeatherToCoreData(_ weather: WeatherResponse) {
-        networkService?.fetchImage(stringUrl: weather.current.condition.icon) { result in
+        networkService?.fetchImage(stringUrl: "https:" + weather.current.condition.icon) { result in
             switch result {
             case .failure(let error): print(error.localizedDescription)
             case .success(let data):
@@ -38,6 +38,7 @@ final class MainViewModel: MainViewModelProtocol {
                                                               temp: weather.current.temp_c,
                                                               condition: weather.current.condition.text,
                                                               icon: data))
+                self.updateViewData?(.success(self.coreDataManager?.getWeather().reversed() ?? []))
             }
         }
     }
